@@ -54,7 +54,7 @@ export class AppComponent implements AfterViewInit, OnInit {
   openDialogAgregarTarea() {
     this.dialog.open(DialogAgregarTareaComponent,{
       disableClose:true,
-      width:"350px",
+      width:"300px",
     }).afterClosed().subscribe(resultado=>{
       if (resultado==="creado"){
         this.ListarTareas();

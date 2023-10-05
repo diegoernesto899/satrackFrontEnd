@@ -102,7 +102,7 @@ export class DialogAgregarTareaComponent implements OnInit {
 console.log(this.formTarea.value);
     const modelo: Tarea = {
       idTarea: 0,   
-      idEstado:0,   
+      idEstado: this.formTarea.value.EstadoTarea,   
       tituloTarea: this.formTarea.value.Titulo,
       descripcionTarea: this.formTarea.value.Descripcion,
       fechaFinalizacion: this.formTarea.value.FechaFinalizacion,
@@ -122,7 +122,7 @@ console.log(this.formTarea.value);
   }else{
     
     modelo.idTarea= this.formTarea.value.IdTarea;
-    modelo.idEstado= this.formTarea.value.EstadoTarea;    
+      
     this._tareaService.updateTarea(modelo).subscribe(
       result => {                
         this.MostrarAlerta("Actualizado correctamente", "Listo");

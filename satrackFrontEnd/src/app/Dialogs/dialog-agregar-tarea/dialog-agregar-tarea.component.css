@@ -1,6 +1,7 @@
-.mat-form-field{
+.mat-grid-tile{
     font-size: 14px;
-    width: 100%!important;
+    width: 100% !important;
+    margin: 0px !important;
 }
 .mdc-mat-mdc-dialog-container{
 
