@@ -32,10 +32,12 @@ import { HttpClientModule } from '@angular/common/http';
 
 //grillas columnas y filas
 import {MatGridListModule} from '@angular/material/grid-list';
+import { DialogAgregarTareaComponent } from './Dialogs/dialog-agregar-tarea/dialog-agregar-tarea.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    DialogAgregarTareaComponent
   ],
   imports: [
     BrowserModule,

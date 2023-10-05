@@ -1,7 +1,12 @@
+import { Categoria } from "./categoria";
+
 export interface Tarea {
     IdTarea:number,
     TituloTarea:string,
-    DescripcionTarea:string,
+    DescripcionTarea?:string,
     FechaFinalizacion:Date,
-    CategoriaTarea:number
+    CategoriaTarea:Categoria,
+    IdCategoria:number
 }
+
+
