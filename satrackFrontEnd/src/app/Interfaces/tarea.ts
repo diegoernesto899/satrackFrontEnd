@@ -5,7 +5,7 @@ export interface Tarea {
     TituloTarea:string,
     DescripcionTarea?:string,
     FechaFinalizacion:Date,
-    CategoriaTarea:Categoria,
+    CategoriaTarea?:Categoria,
     IdCategoria:number
 }
 

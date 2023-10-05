@@ -1,6 +1,42 @@
 <h1 mat-dialog-title>Agregar Tarea</h1>
-<div mat-dialog-content>This dialog showcases the title, close, content and actions elements.</div>
+<div mat-dialog-content>
+    <form [formGroup]="formTarea">
+        <mat-grid-list cols="1" rowHeight="80px">
+            <mat-grid-tile>
+                <mat-form-field class="outline">
+                    <mat-label>Titulo</mat-label>
+                    <input matInput type="text" formControlName="Titulo">
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <mat-form-field class="outline">
+                    <mat-label>Descripción</mat-label>
+                    <input matInput type="text" formControlName="Descripcion">
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <mat-form-field class="outline">
+                    <mat-label>Fecha de Finalizacion</mat-label>
+                    <input matInput [matDatepicker]="picker" formControlName="FechaFinalizacion">
+                    <mat-hint>MM/DD/YYYY</mat-hint>
+                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                  </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <mat-form-field class="outline">
+                    <mat-label>Categoria</mat-label>
+                    <mat-select formControlName="CategoriaTarea">
+                      <mat-option *ngFor="let item of listaCategorias" [value]="item.id" >
+                        {{item.nombre}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+            </mat-grid-tile>
+        </mat-grid-list>
+    </form>
+</div>
 <div mat-dialog-actions>
-  <button mat-button mat-dialog-close>Close</button>
-  <button mat-button mat-dialog-close>Agregar</button>
+    <button mat-button mat-dialog-close>Close</button>
+    <button mat-button color="primary" (click)="AgregarTarea()" [disabled]="formTarea.invalid">{{botonAccion}}</button>
 </div>

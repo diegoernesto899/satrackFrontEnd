@@ -1,9 +1,9 @@
-import {AfterViewInit, Component, ViewChild,OnInit} from '@angular/core';
-import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
-import {MatTableDataSource, MatTableModule} from '@angular/material/table';
+import { AfterViewInit, Component, ViewChild, OnInit } from '@angular/core';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { TareaService } from './Services/tarea.service';
-import {Tarea} from './Interfaces/tarea';
-import {MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatDialogModule} from '@angular/material/dialog';
+import { Tarea } from './Interfaces/tarea';
+import { MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { DialogAgregarTareaComponent } from './Dialogs/dialog-agregar-tarea/dialog-agregar-tarea.component';
 
 @Component({
@@ -11,17 +11,15 @@ import { DialogAgregarTareaComponent } from './Dialogs/dialog-agregar-tarea/dial
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements AfterViewInit,OnInit {
+export class AppComponent implements AfterViewInit, OnInit {
   title = 'satrackFrontEnd';
-  displayedColumns: string[] = ['IdTarea', 'TituloTarea', 'FechaFinalizacion', 'CategoriaTarea','EditarTarea','EliminarTarea'];
+  displayedColumns: string[] = ['IdTarea', 'TituloTarea', 'FechaFinalizacion', 'CategoriaTarea', 'EditarTarea', 'EliminarTarea'];
   dataSource = new MatTableDataSource<Tarea>();
 
-  constructor(private _tareaService:TareaService,public dialog:MatDialog){
+  constructor(private _tareaService: TareaService, public dialog: MatDialog) {
   }
 
-  openDialogAgregarTarea() {
-    this.dialog.open(DialogAgregarTareaComponent);
-  }
+  
 
   ngOnInit(): void {
     this.ListarTareas();
@@ -42,12 +40,39 @@ export class AppComponent implements AfterViewInit,OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
-  ListarTareas(){
+
+
+  ListarTareas() {
     this._tareaService.getTareas().subscribe({
-      next:(data)=> {
-        console.log(data);
+      next: (data) => {        
         this.dataSource.data = data;
-      },error:(e)=>{}
+      }, error: (e) => { }
+    });
+  }
+
+
+  openDialogAgregarTarea() {
+    this.dialog.open(DialogAgregarTareaComponent,{
+      disableClose:true,
+      width:"350px",
+    }).afterClosed().subscribe(resultado=>{
+      if (resultado==="creado"){
+        this.ListarTareas();
+      }
+    });
+  }
+  
+
+  openDialogEditarTarea(dataTarea:Tarea) {
+    console.log("dataTarea"+dataTarea.IdTarea);
+    this.dialog.open(DialogAgregarTareaComponent,{
+      width:"350px",
+      data:dataTarea
+      
+    }).afterClosed().subscribe(resultado=>{
+      if (resultado==="editado"){
+        this.ListarTareas();
+      }
     });
   }
 
