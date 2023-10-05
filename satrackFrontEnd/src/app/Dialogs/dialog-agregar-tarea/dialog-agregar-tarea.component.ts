@@ -9,6 +9,8 @@ import { TareaService } from 'src/app/Services/tarea.service';
 import { CategoriaService } from 'src/app/Services/categoria.service';
 import { Categoria } from 'src/app/Interfaces/categoria';
 import { Tarea } from 'src/app/Interfaces/tarea';
+import { Estado } from 'src/app/Interfaces/estado';
+import { EstadoService } from 'src/app/Services/estado.service';
 
 export const MY_DATE_FORMATS = {
   parse: {
@@ -32,8 +34,10 @@ export const MY_DATE_FORMATS = {
 export class DialogAgregarTareaComponent implements OnInit {
 
   formTarea: FormGroup;
+  tituloAccion: string ="AGREGAR TAREA";
   botonAccion: string = "Guardar";
-  listaCategorias: Categoria[] = []
+  listaCategorias: Categoria[] = [];
+  listaEstados: Estado[] = [];
 
   constructor(
     private dialogoReferencia: MatDialogRef<DialogAgregarTareaComponent>,
@@ -41,14 +45,17 @@ export class DialogAgregarTareaComponent implements OnInit {
     private _snackBar: MatSnackBar,
     private _tareaService: TareaService,
     private _categoriaService: CategoriaService,
+    private _estadoService: EstadoService,
     @Inject(MAT_DIALOG_DATA) public dataTarea:Tarea
-  ) {
-
+  ) {    
     this.formTarea = this.fb.group({
       Titulo: ['', Validators.required],
       Descripcion: ['', Validators.required],
       FechaFinalizacion: ['', Validators.required],
-      CategoriaTarea: ['', Validators.required]
+      CategoriaTarea: ['', Validators.required],
+      EstadoTarea: ['', Validators.required],
+      IdTarea:[],
+      idEstado:[]
     })
 
     this._categoriaService.getCategorias().subscribe({
@@ -58,15 +65,27 @@ export class DialogAgregarTareaComponent implements OnInit {
 
     })
 
+    this._estadoService.getEstados().subscribe({
+      next: (data) => {        
+        this.listaEstados = data;        
+      }, error: (e) => { }
+
+    })
+
   }
   ngOnInit(): void { 
-    if(this.dataTarea){
+    if(this.dataTarea){  
+        console.log(this.dataTarea)
       this.formTarea.patchValue({
-        Titulo: this.dataTarea.TituloTarea,
-        Descripcion: this.dataTarea.DescripcionTarea,
-        FechaFinalizacion: moment(this.dataTarea.FechaFinalizacion,'DD/MM/YY'),
-        CategoriaTarea:this.dataTarea.IdCategoria
+        Titulo: this.dataTarea.tituloTarea,
+        Descripcion: this.dataTarea.descripcionTarea,
+        FechaFinalizacion: this.dataTarea.fechaFinalizacion,
+        CategoriaTarea:this.dataTarea.idCategoria,
+        IdTarea:this.dataTarea.idTarea,
+        EstadoTarea:this.dataTarea.idEstado
       })
+      this.tituloAccion = "EDITAR TAREA";
+      this.botonAccion = "Actualizar";
     }
 
   }
@@ -80,14 +99,17 @@ export class DialogAgregarTareaComponent implements OnInit {
   }
 
   AgregarTarea() {
-
+console.log(this.formTarea.value);
     const modelo: Tarea = {
-      IdTarea: 0,
-      TituloTarea: this.formTarea.value.Titulo,
-      DescripcionTarea: this.formTarea.value.Descripcion,
-      FechaFinalizacion: this.formTarea.value.FechaFinalizacion,
-      IdCategoria: this.formTarea.value.CategoriaTarea
+      idTarea: 0,   
+      idEstado:0,   
+      tituloTarea: this.formTarea.value.Titulo,
+      descripcionTarea: this.formTarea.value.Descripcion,
+      fechaFinalizacion: this.formTarea.value.FechaFinalizacion,
+      idCategoria: this.formTarea.value.CategoriaTarea       
     }
+    if(this.dataTarea == null){
+    
     this._tareaService.addTarea(modelo).subscribe(
       result => {                
         this.MostrarAlerta("Agregado correctamente", "Listo");
@@ -97,6 +119,21 @@ export class DialogAgregarTareaComponent implements OnInit {
         this.MostrarAlerta(error, "Error");
       }
     );
+  }else{
+    
+    modelo.idTarea= this.formTarea.value.IdTarea;
+    modelo.idEstado= this.formTarea.value.EstadoTarea;    
+    this._tareaService.updateTarea(modelo).subscribe(
+      result => {                
+        this.MostrarAlerta("Actualizado correctamente", "Listo");
+        this.dialogoReferencia.close("actualizado");
+      },
+      error => {
+        this.MostrarAlerta(error, "Error");
+      }
+    );
+
+  }
   }
 
 }

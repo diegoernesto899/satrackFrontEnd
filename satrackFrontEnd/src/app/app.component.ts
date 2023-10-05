@@ -5,6 +5,7 @@ import { TareaService } from './Services/tarea.service';
 import { Tarea } from './Interfaces/tarea';
 import { MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { DialogAgregarTareaComponent } from './Dialogs/dialog-agregar-tarea/dialog-agregar-tarea.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-root',
@@ -13,10 +14,10 @@ import { DialogAgregarTareaComponent } from './Dialogs/dialog-agregar-tarea/dial
 })
 export class AppComponent implements AfterViewInit, OnInit {
   title = 'satrackFrontEnd';
-  displayedColumns: string[] = ['IdTarea', 'TituloTarea', 'FechaFinalizacion', 'CategoriaTarea', 'EditarTarea', 'EliminarTarea'];
+  displayedColumns: string[] = ['IdTarea', 'TituloTarea', 'FechaFinalizacion', 'CategoriaTarea','Estado', 'EditarTarea', 'EliminarTarea'];
   dataSource = new MatTableDataSource<Tarea>();
 
-  constructor(private _tareaService: TareaService, public dialog: MatDialog) {
+  constructor(private _tareaService: TareaService, public dialog: MatDialog,private _snackBar: MatSnackBar,) {
   }
 
   
@@ -41,7 +42,6 @@ export class AppComponent implements AfterViewInit, OnInit {
     }
   }
 
-
   ListarTareas() {
     this._tareaService.getTareas().subscribe({
       next: (data) => {        
@@ -63,19 +63,39 @@ export class AppComponent implements AfterViewInit, OnInit {
   }
   
 
-  openDialogEditarTarea(dataTarea:Tarea) {
-    console.log("dataTarea"+dataTarea.IdTarea);
+  openDialogEditarTarea(dataTarea:Tarea) {    
+    console.log(dataTarea);
     this.dialog.open(DialogAgregarTareaComponent,{
-      width:"350px",
-      data:dataTarea
-      
+      width:"400px",
+      data:dataTarea      
     }).afterClosed().subscribe(resultado=>{
-      if (resultado==="editado"){
+      if (resultado==="actualizado"){
         this.ListarTareas();
       }
     });
   }
 
+  eliminarTarea(idTarea:number){
+    
+    this._tareaService.deleteTarea(idTarea).subscribe(
+      
+      result => {                
+        this.MostrarAlerta("Eliminado correctamente", "Eliminado");
+        this.ListarTareas();
+      },
+      error => {
+        this.MostrarAlerta(error, "Error");
+      }
+    );
+  }
+  
+  MostrarAlerta(message: string, action: string) {
+    this._snackBar.open(message, action, {
+      horizontalPosition: "center",
+      verticalPosition: "top",
+      duration: 3000
+    });
+  }
 }
 
 

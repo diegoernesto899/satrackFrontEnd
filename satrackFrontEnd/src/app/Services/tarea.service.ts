@@ -22,6 +22,7 @@ export class TareaService {
     return this.http.post<Tarea>(`${this.apiUrl}AgregarTarea`,modelo);
   }
   updateTarea(modelo:Tarea):Observable<Tarea>{
+    console.log(modelo);
     return this.http.put<Tarea>(`${this.apiUrl}ActualizarTarea`,modelo);
   }
 

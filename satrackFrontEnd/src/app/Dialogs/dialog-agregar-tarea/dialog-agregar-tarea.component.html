@@ -1,4 +1,4 @@
-<h1 mat-dialog-title>Agregar Tarea</h1>
+<h1 mat-dialog-title>{{tituloAccion}}</h1>
 <div mat-dialog-content>
     <form [formGroup]="formTarea">
         <mat-grid-list cols="1" rowHeight="80px">
@@ -28,6 +28,16 @@
                     <mat-label>Categoria</mat-label>
                     <mat-select formControlName="CategoriaTarea">
                       <mat-option *ngFor="let item of listaCategorias" [value]="item.id" >
+                        {{item.nombre}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <mat-form-field class="outline">
+                    <mat-label>Estado</mat-label>
+                    <mat-select formControlName="EstadoTarea">
+                      <mat-option *ngFor="let item of listaEstados" [value]="item.id" >
                         {{item.nombre}}
                       </mat-option>
                     </mat-select>

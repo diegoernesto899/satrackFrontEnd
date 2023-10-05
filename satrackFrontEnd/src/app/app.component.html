@@ -1,6 +1,9 @@
 <div style="width: 70%; margin: 40px auto">
+  <h1 class="title">Prueba Técnica Diego Puentes</h1>
   <h1>LISTA DE TAREAS</h1>
+
   <button mat-raised-button color="primary" (click)="openDialogAgregarTarea()">Agregar Tarea</button>
+  
   <mat-form-field>
     <mat-label>Filter</mat-label>
     <input matInput (keyup)="applyFilter($event)" placeholder="Puede filtrar por cualquier item" #input>
@@ -34,10 +37,16 @@
       </ng-container>
 
       <!-- Symbol Column -->
+      <ng-container matColumnDef="Estado">
+        <th mat-header-cell *matHeaderCellDef> Estado </th>
+        <td mat-cell *matCellDef="let element"> {{element.estadoTarea.nombreEstado}} </td>
+      </ng-container>
+
+      <!-- Symbol Column -->
       <ng-container matColumnDef="EditarTarea">
         <th mat-header-cell *matHeaderCellDef> Editar </th>
         <td mat-cell *matCellDef="let element">
-          <button mat-mini-fab color="primary" (click)="openDialogEditarTarea(element)">
+          <button mat-mini-fab color="primary" (click)="openDialogEditarTarea(element)" >
             <mat-icon>edit</mat-icon>
           </button>
         </td>
@@ -46,11 +55,13 @@
       <ng-container matColumnDef="EliminarTarea">
         <th mat-header-cell *matHeaderCellDef> Eliminar </th>
         <td mat-cell *matCellDef="let element">
-          <button mat-mini-fab color="warn">
+          <button mat-mini-fab color="warn" (click)="eliminarTarea(element.idTarea)">
             <mat-icon>delete</mat-icon>
-          </button>{{element.idTarea}}
+          </button>
         </td>
       </ng-container>
+
+      
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
@@ -58,8 +69,5 @@
 
     <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements">
     </mat-paginator>
-  </div>
-
-
-  <!-- <h1>Desarrollado por Diego Puentes</h1> -->
+  </div>  
 </div>
